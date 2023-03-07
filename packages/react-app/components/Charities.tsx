@@ -23,6 +23,7 @@ const CharityCard = ({
     event.preventDefault();
     onDonate(donationAmount, donationAddress);
     setDonationAmount("");
+    setDonationAddress("");
   };
 
   return (
