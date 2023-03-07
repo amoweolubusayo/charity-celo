@@ -6,7 +6,7 @@ type CharityCardProps = {
   name: string;
   description: string;
   address: string;
-  onDonate: (amount: string) => void;
+  onDonate: (amount: string, address: string) => void;
   donated: boolean;
 };
 
@@ -18,10 +18,10 @@ const CharityCard = ({
   onDonate,
 }: CharityCardProps) => {
   const [donationAmount, setDonationAmount] = useState("");
-
+  const [donationAddress, setDonationAddress] = useState("");
   const handleDonationSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onDonate(donationAmount);
+    onDonate(donationAmount, donationAddress);
     setDonationAmount("");
   };
 
@@ -31,10 +31,19 @@ const CharityCard = ({
       <div className="card-body">
         <h5 className="card-title">{name}</h5>
         <p className="card-text mt-4">{description}</p>
-        <p className="card-text mt-4">{address}</p>
         <form onSubmit={handleDonationSubmit}>
           <div className="form-group mt-4">
-            <label htmlFor="donationAmount">Enter donation amount: </label>
+            <label htmlFor="donationAmount">Enter Recipient Address: </label>
+            <input
+              type="text"
+              className="form-control"
+              id="donationAddress"
+              value={donationAddress}
+              onChange={(event) => setDonationAddress(event.target.value)}
+            />
+            <label htmlFor="donationAmount" className="mt-4">
+              Enter donation amount:{" "}
+            </label>
             <input
               type="text"
               className="form-control"
@@ -85,11 +94,12 @@ const Charities = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleDonate = async (amount: string) => {
+  const handleDonate = async (amount: string, address: string) => {
     try {
       console.log("got here");
       try {
-        await donate(amount);
+        await donate(amount, address);
+        alert("donation successful");
         console.log("here again");
       } catch (error) {
         console.error(error);
@@ -102,7 +112,6 @@ const Charities = () => {
   };
 
   return (
-   
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-10">
       <div className="flex flex-wrap -mx-4">
         {charities.map((charity, index) => (

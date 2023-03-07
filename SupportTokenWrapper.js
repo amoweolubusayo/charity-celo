@@ -1,6 +1,6 @@
 import { abi } from "./SupportTokenABI.json";
 import Web3 from "web3";
-import { providers, Contract , ethers} from "ethers";
+import { providers, Contract, ethers } from "ethers";
 
 require("dotenv").config();
 
@@ -27,19 +27,19 @@ export async function getContract() {
   return supportTokenContract;
 }
 
-export async function donate(amount) {
+export async function donate(amount,address) {
   // Approve the transfer of donation amount to the charity address
 
   const contract = await getContract();
   const approvalTx = await contract.approve(
-    "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    address,
     amount
   );
   console.log(await contract);
   console.log(await approvalTx);
   // Transfer tokens to another account
   const transferTx = await contract.transfer(
-    "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+   address,
     amount
   );
   console.log("Transfer transaction hash: ", transferTx.transactionHash);
@@ -47,6 +47,6 @@ export async function donate(amount) {
     value: amount,
   });
   console.log(finalTx);
-  const finaleTx = await contract.withdrawChest(); 
-  console.log(finaleTx);
+  //   const finaleTx = await contract.withdrawChest();
+  //   console.log(finaleTx);
 }
